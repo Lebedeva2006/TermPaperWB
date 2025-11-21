@@ -1,17 +1,20 @@
-*Marketplace Product Analysis System*
-План работ по проекту: Система анализа товаров с маркетплейсов
-1. Формирование требований и архитектуры
-2. База проекта
-3. Модуль сбора данных с маркетплейсов
-4. Модуль анализа и ранжирования товаров
-5. Backend API
-6. Интерфейс пользователя 
-7. Тестирование
-8. Развёртывание
-9. Доработка и улучшение
+Marketplace Product Analysis System
 
-Выбранные инструменты:
-Backend: Python + FastAPI
-Frontend: HTML + CSS + JavaScript
-База данных: PostgreSQL
-Парсинг: aiohttp + BeautifulSoup + Selenium
+
+Project Work Plan: 
+
+1. Planning & Technical Design
+2. Base Setup
+3. Marketplace Data Gavering
+4. Product Analysis and Ranking
+5. Backend API
+6. User Interface
+7. Testing
+8. Deployment
+9. Refinement and Improvements
+
+Selected Technologies/Tools:  
+- Backend: Python + FastAPI  
+- Frontend: HTML + CSS + JavaScript  
+- Database: PostgreSQL  
+- Data Parsing/Scraping: aiohttp + BeautifulSoup + Selenium

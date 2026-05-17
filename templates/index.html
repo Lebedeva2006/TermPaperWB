@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Поиск товаров</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.5;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input#query {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .hero-card {
+            border: 2px solid #2a6cff;
+            border-radius: 10px;
+            padding: 20px;
+            background: #eef3ff;
+            margin-bottom: 24px;
+        }
+
+        .hero-card h2 {
+            margin-top: 0;
+            color: #2a3f7d;
+        }
+
+        .hero-card p {
+            margin: 8px 0;
+        }
+
+        .marketplace-group {
+            margin-bottom: 24px;
+        }
+
+        .marketplace-group h3 {
+            margin-bottom: 12px;
+        }
+
+        .mini-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        .mini-card a {
+            color: #2a6cff;
+            text-decoration: none;
+        }
+
+        .marketplace-name {
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Поиск товаров</h1>
+
+<div class="search-row">
+    <input id="query" placeholder="Введите товар" />
+    <button onclick="search()">Найти</button>
+</div>
+
+<div id="results"></div>
+
+<script>
+const marketplaceNames = {
+    wildberries: 'Wildberries',
+    yandex: 'Yandex'
+};
+
+async function search() {
+    const q = document.getElementById('query').value.trim();
+    if (!q) {
+        alert('Введите запрос для поиска');
+        return;
+    }
+
+    const response = await fetch(`/search?q=${encodeURIComponent(q)}`);
+    const data = await response.json();
+
+    let html = '';
+
+    if (data.hero) {
+        html += `
+            <div class="hero-card">
+                <div class="marketplace-name">Лучший товар — ${marketplaceNames[data.hero.marketplace] || data.hero.marketplace}</div>
+                <h2>${data.hero.title}</h2>
+                <p><strong>Цена:</strong> ${data.hero.price} ₽</p>
+                <p><strong>Рейтинг:</strong> ${data.hero.rating}</p>
+                <p><strong>Отзывов:</strong> ${data.hero.reviews_count}</p>
+                <p><a href="${data.hero.url}" target="_blank">Перейти к товару</a></p>
+            </div>
+        `;
+    } else {
+        html += '<p>Товар не найден. Попробуйте другой запрос.</p>';
+    }
+
+    const groups = data.top3 || {};
+    for (const key of ['wildberries', 'yandex']) {
+        const items = groups[key] || [];
+        html += `<div class="marketplace-group"><h3>Топ-3 ${marketplaceNames[key] || key}</h3>`;
+        if (!items.length) {
+            html += '<p>Нет данных для этого маркетплейса.</p>';
+        } else {
+            for (const item of items) {
+                html += `
+                    <div class="mini-card">
+                        <div><strong>${item.title}</strong></div>
+                        <div>Цена: ${item.price} ₽</div>
+                        <div>Рейтинг: ${item.rating}</div>
+                        <div>Отзывов: ${item.reviews_count}</div>
+                        <div><a href="${item.url}" target="_blank">Ссылка</a></div>
+                    </div>
+                `;
+            }
+        }
+        html += '</div>';
+    }
+
+    document.getElementById('results').innerHTML = html;
+}
+</script>
+
+</body>
+</html>

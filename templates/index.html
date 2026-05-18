@@ -1,148 +1,456 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <title>Поиск товаров</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.5;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>MySearch</title>
+<link rel="icon" type="image/jpeg" href="/static/by.jpg">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .search-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    background:
+        linear-gradient(135deg, #ffdde8 0%, #ffffff 50%, #ffd1dc 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #222;
+}
 
-        input#query {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-        }
 
-        button {
-            padding: 10px 16px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+.bg-circle {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -1;
+}
 
-        .hero-card {
-            border: 2px solid #2a6cff;
-            border-radius: 10px;
-            padding: 20px;
-            background: #eef3ff;
-            margin-bottom: 24px;
-        }
+.circle1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 0, 90, 0.25);
+    top: -100px;
+    left: -100px;
+}
 
-        .hero-card h2 {
-            margin-top: 0;
-            color: #2a3f7d;
-        }
+.circle2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 120, 180, 0.25);
+    bottom: -100px;
+    right: -100px;
+}
 
-        .hero-card p {
-            margin: 8px 0;
-        }
 
-        .marketplace-group {
-            margin-bottom: 24px;
-        }
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding-top: 60px;
+}
 
-        .marketplace-group h3 {
-            margin-bottom: 12px;
-        }
 
-        .mini-card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-            background: #fff;
-        }
+.title {
+    text-align: center;
+    font-size: 58px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #d60055;
+    text-shadow:
+        0 0 10px rgba(255,0,100,0.4),
+        0 0 25px rgba(255,0,120,0.25);
+    margin-bottom: 40px;
+}
 
-        .mini-card a {
-            color: #2a6cff;
-            text-decoration: none;
-        }
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
 
-        .marketplace-name {
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 0.05em;
-            color: #555;
-            margin-bottom: 8px;
-        }
-    </style>
+.search-box {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    gap: 15px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(18px);
+    border-radius: 25px;
+    padding: 18px;
+    box-shadow:
+        0 10px 30px rgba(255, 0, 90, 0.15);
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.search-box button {
+    border: none;
+    background: linear-gradient(135deg, #ff0055, #ff5f9e);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(255,0,100,0.35);
+}
+
+.search-box button:hover {
+    transform: translateY(-2px) scale(1.03);
+}
+
+
+.hero-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    border-radius: 30px;
+    padding: 30px;
+    margin-bottom: 35px;
+    box-shadow:
+        0 10px 40px rgba(255,0,80,0.12);
+    animation: fadeUp 0.5s ease;
+}
+
+.marketplace-name {
+    color: #ff0055;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hero-card h2 {
+    margin-bottom: 15px;
+    color: #c2004f;
+}
+
+.hero-card p {
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+.hero-card a {
+    color: #ff0055;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+.marketplace-group {
+    margin-bottom: 40px;
+}
+
+.marketplace-group h3 {
+    margin-bottom: 20px;
+    color: #d60055;
+    font-size: 28px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 20px;
+}
+
+.mini-card {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(15px);
+    border-radius: 22px;
+    padding: 20px;
+    transition: 0.3s;
+    box-shadow:
+        0 8px 25px rgba(255,0,100,0.08);
+    animation: fadeUp 0.6s ease;
+}
+
+.mini-card:hover {
+    transform: translateY(-5px);
+}
+
+.mini-card strong {
+    display: block;
+    margin-bottom: 12px;
+    color: #b10047;
+}
+
+.mini-card div {
+    margin-bottom: 8px;
+}
+
+.mini-card a {
+    color: #ff0055;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.92);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.loader-video {
+    width: 320px;
+    border-radius: 30px;
+    box-shadow: 0 0 40px rgba(255,0,100,0.35);
+}
+
+.loader-text {
+    margin-top: 20px;
+    font-size: 26px;
+    color: #d10055;
+    font-weight: bold;
+}
+
+.title-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 40px;
+}
+
+.logo {
+    width: 85px;
+    height: 85px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 25px rgba(255,0,120,0.35);
+
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .title {
+        font-size: 36px;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<h1>Поиск товаров</h1>
+<div class="bg-circle circle1"></div>
+<div class="bg-circle circle2"></div>
 
-<div class="search-row">
-    <input id="query" placeholder="Введите товар" />
-    <button onclick="search()">Найти</button>
+
+<div class="loader-overlay" id="loader">
+
+    <video
+        id="loaderVideo"
+        class="loader-video"
+        loop
+    >
+        <source src="/static/video.mp4" type="video/mp4">
+    </video>
+
+    <div class="loader-text">
+        Ищем лучшие товары...
+    </div>
 </div>
 
-<div id="results"></div>
+<div class="container">
+
+    <div class="title-wrapper">
+
+    <img
+        src="/static/my.jpg"
+        class="logo"
+        alt="logo"
+    >
+
+    <h1 class="title">MY SEARCH</h1>
+
+    </div>
+
+    <div class="search-wrapper">
+        <div class="search-box">
+
+            <input
+                id="query"
+                placeholder="Введите товар..."
+            >
+
+            <button onclick="search()">
+                Найти
+            </button>
+
+        </div>
+    </div>
+
+    <div id="results"></div>
+
+</div>
 
 <script>
+
 const marketplaceNames = {
     wildberries: 'Wildberries',
     yandex: 'Yandex'
 };
 
 async function search() {
+
     const q = document.getElementById('query').value.trim();
+
     if (!q) {
-        alert('Введите запрос для поиска');
+        alert('Введите запрос');
         return;
     }
 
-    const response = await fetch(`/search?q=${encodeURIComponent(q)}`);
-    const data = await response.json();
+    const loader = document.getElementById('loader');
+    const video = document.getElementById('loaderVideo');
 
-    let html = '';
+    loader.style.display = 'flex';
 
-    if (data.hero) {
-        html += `
-            <div class="hero-card">
-                <div class="marketplace-name">Лучший товар — ${marketplaceNames[data.hero.marketplace] || data.hero.marketplace}</div>
-                <h2>${data.hero.title}</h2>
-                <p><strong>Цена:</strong> ${data.hero.price} ₽</p>
-                <p><strong>Рейтинг:</strong> ${data.hero.rating}</p>
-                <p><strong>Отзывов:</strong> ${data.hero.reviews_count}</p>
-                <p><a href="${data.hero.url}" target="_blank">Перейти к товару</a></p>
-            </div>
-        `;
-    } else {
-        html += '<p>Товар не найден. Попробуйте другой запрос.</p>';
-    }
+    video.currentTime = 0;
+    video.play();
 
-    const groups = data.top3 || {};
-    for (const key of ['wildberries', 'yandex']) {
-        const items = groups[key] || [];
-        html += `<div class="marketplace-group"><h3>Топ-3 ${marketplaceNames[key] || key}</h3>`;
-        if (!items.length) {
-            html += '<p>Нет данных для этого маркетплейса.</p>';
-        } else {
+    try {
+
+        const response = await fetch(`/search?q=${encodeURIComponent(q)}`);
+        const data = await response.json();
+
+        let html = '';
+
+        if (data.hero) {
+
+            html += `
+                <div class="hero-card">
+
+                    <div class="marketplace-name">
+                        Лучший товар — ${marketplaceNames[data.hero.marketplace] || data.hero.marketplace}
+                    </div>
+
+                    <h2>${data.hero.title}</h2>
+
+                    <p><strong>Цена:</strong> ${data.hero.price} ₽</p>
+                    <p><strong>Рейтинг:</strong> ${data.hero.rating}</p>
+                    <p><strong>Отзывов:</strong> ${data.hero.reviews_count}</p>
+
+                    <p>
+                        <a href="${data.hero.url}" target="_blank">
+                            Перейти к товару
+                        </a>
+                    </p>
+
+                </div>
+            `;
+        }
+
+        const groups = data.top3 || {};
+
+        for (const key of ['wildberries', 'yandex']) {
+
+            const items = groups[key] || [];
+
+            html += `
+                <div class="marketplace-group">
+
+                    <h3>
+                        Топ-3 ${marketplaceNames[key]}
+                    </h3>
+
+                    <div class="cards-grid">
+            `;
+
             for (const item of items) {
+
                 html += `
                     <div class="mini-card">
-                        <div><strong>${item.title}</strong></div>
+
+                        <strong>${item.title}</strong>
+
                         <div>Цена: ${item.price} ₽</div>
                         <div>Рейтинг: ${item.rating}</div>
-                        <div>Отзывов: ${item.reviews_count}</div>
-                        <div><a href="${item.url}" target="_blank">Ссылка</a></div>
+                        <div>Отзывы: ${item.reviews_count}</div>
+
+                        <a href="${item.url}" target="_blank">
+                            Открыть товар
+                        </a>
+
                     </div>
                 `;
             }
-        }
-        html += '</div>';
-    }
 
-    document.getElementById('results').innerHTML = html;
+            html += `
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('results').innerHTML = html;
+
+    } catch (err) {
+
+        alert('Ошибка поиска');
+
+    } finally {
+
+        video.pause();
+        loader.style.display = 'none';
+    }
 }
 </script>
 

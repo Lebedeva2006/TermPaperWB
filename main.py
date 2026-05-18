@@ -3,13 +3,14 @@ from fastapi import FastAPI, Depends, Query
 from fastapi.responses import HTMLResponse
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-
+from fastapi.staticfiles import StaticFiles
 from app.database import engine, Base, get_db
 from app.models.product import Product
 from app.scraper.wildberries import search as search_wildberries
 from app.scraper.yandex import search as search_yandex
 
 app = FastAPI(title="Marketplace Analyzer")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 Base.metadata.create_all(bind=engine)
 
